@@ -74,7 +74,7 @@
         #cheat-input:focus { border-color: #2ecc71; box-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
 
         select, .skin-btn { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 4vw, 16px); font-weight: bold; border-radius: 8px; border: 2px solid rgba(241, 196, 15, 0.5); background: rgba(0,0,0,0.3); color: white; cursor: pointer; text-align: center; outline: none; transition: 0.3s; }
-        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(16px, 5vw, 20px); text-shadow: 1px 1px 2px black;}
+        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(16px, 5vw, 22px); text-shadow: 1px 1px 2px black;}
         .skin-btn:active { filter: brightness(1.2); transform: translateY(-2px); }
         
         select option { background: #1a1a2e; color: white; }
@@ -206,15 +206,15 @@
 
         // --- HỆ THỐNG ÂM THANH (SOUND MANAGER) ---
         const bgm = new Audio('bgm.mp3');
-        bgm.loop = true; bgm.volume = 0.4; 
+        bgm.loop = true; 
+        bgm.volume = 0.1; // GIẢM NHẠC NỀN NHỎ HẲN (XUỐNG 0.1 CHO CHẮC)
         const killSounds = ['kill1.mp3', 'kill2.mp3', 'kill3.mp3', 'kill4.mp3', 'kill5.mp3'];
 
-        function playSFX(src, vol = 1.0) {
+        function playSFX(src, vol = 1.0) { // SFX ĐỂ MẶC ĐỊNH LỚN NHẤT (1.0)
             let sound = new Audio(src); sound.volume = vol;
             sound.play().catch(e => console.log("SFX Error: ", e));
         }
 
-        // --- BIẾN TOÀN CỤC CHO SCREEN SHAKE ---
         let shakeFrames = 0;
         let shakeMagnitude = 0;
 
@@ -241,8 +241,25 @@
             }
         }
         
-        const wallTaunts = ["Mù à mà đâm tường?", "Tường ngon không em?", "Bố tổ sư cái thằng lái lụa!", "Đâm tường vỡ thớt cmnr!", "Mắt để dưới gầm giường à?", "Lái ngu vãi đạn!"];
-        const killTaunts = ["Quỳ xuống gọi {name} là bố đi!", "Bị {name} nó lùa như cún!", "Trình mầm non đòi đấu với {name}!", "Bị {name} nó tạt cho sang chấn tâm lý!", "{name} nó nhét hành ngập mõm kìa!", "Ăn quả tạt đầu khét lẹt từ {name}!", "{name} said: Đứng lùi ra cho anh biểu diễn!"];
+        // CÂU KHỊA "MỎ HỖN" SIÊU MẶN
+        const wallTaunts = [
+            "Mù à mà đâm tường? Đi thay kính đi em!",
+            "Tường ngon không sếp? Nhai kỹ vào nhé!",
+            "Lái ngu vầy thì đi bộ cho nó lành.",
+            "Bố mẹ cho ăn học để đi đâm tường à?",
+            "Mắt để ở mông hay sao mà lái thế?",
+            "Phí cả cơm nước, đâm tường vỡ thớt cmnr!",
+            "Thắng làm vua, đâm tường làm cún nhé em."
+        ];
+        const killTaunts = [
+            "Bị {name} nó vả cho sang chấn tâm lý!",
+            "Quỳ xuống gọi {name} là bố đi con trai.",
+            "Trình này đi chăn vịt đi, tuổi gì với {name}!",
+            "Thấy {name} thì né ra, đâm đầu vào làm gì?",
+            "Bị {name} nó nhét hành ngập mõm rồi kìa!",
+            "Tuổi tôm đòi chan cơm với {name} à?",
+            "Nhìn {name} mà học tập, gáy nữa đi em!"
+        ];
         function getDeathMessage(killerName) {
             if (!killerName) return wallTaunts[Math.floor(Math.random() * wallTaunts.length)];
             return killTaunts[Math.floor(Math.random() * killTaunts.length)].replace(/{name}/g, killerName);
@@ -368,7 +385,7 @@
                 joystickZone.style.display = 'block'; 
             }
             
-            bgm.play().catch(e => console.log("Không thể tự phát nhạc: ", e));
+            bgm.play().catch(e => console.log("BGM Error: ", e));
 
             player = new Snake(pName, true, 50, 0, 0, skins[currentSkinIdx]); 
             player.hp = player.maxHp;
@@ -441,7 +458,8 @@
                 else { owner.shootCooldown = 2; }
                 owner.updateStats();
                 
-                if (owner.isPlayer) playSFX('shoot.mp3', 0.4);
+                // PHÁT TIẾNG BẮN LỚN NẾU LÀ NGƯỜI CHƠI
+                if (owner.isPlayer) playSFX('shoot.mp3', 1.0);
 
                 let head = owner.segments[0];
                 let projSpeed = isCheater ? 45 : 22 + (owner.size * 0.15); 
@@ -487,8 +505,11 @@
             mobileControls.style.display = 'none'; joystickZone.style.display = 'none';
             if(player) player.isBoosting = false;
 
+            // DỪNG NHẠC VÀ PHÁT TIẾNG CHẾT (LỚN)
             bgm.pause(); bgm.currentTime = 0;
-            triggerShake(20, 25); // Rung cực mạnh khi tèo
+            playSFX('die.mp3', 1.0);
+            
+            triggerShake(20, 25); 
         }
 
         function updateTargetFromEvent(clientX, clientY) {
@@ -766,7 +787,6 @@
                             s.hp -= p.damage;
                             hitSomeone = true;
                             
-                            // Đạn trúng rắn -> Rung màn hình nếu player bắn
                             if (p.owner.isPlayer) triggerShake(8, 10);
                             
                             foods.push({ x: p.x, y: p.y, size: 8, color: p.color, isBig: false, isHp: false });
@@ -775,9 +795,10 @@
                                 s.dead = true;
                                 if (s.isPlayer) { gameOver(p.owner.name); } 
                                 else {
+                                    // NGƯỜI CHƠI BẮN CHẾT BOT -> PHÁT TIẾNG GIẾT NGƯỜI (LỚN)
                                     if (p.owner.isPlayer) {
-                                        playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 0.8);
-                                        triggerShake(12, 15); // Rung thêm khi giết địch
+                                        playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 1.0);
+                                        triggerShake(12, 15); 
 
                                         let tauntArr = isTrangMode ? trangTaunts : fightTaunts;
                                         let randomTaunt = tauntArr[Math.floor(Math.random() * tauntArr.length)];
@@ -825,9 +846,10 @@
                             defender.score += Math.max(1, Math.floor((attacker.score / 3) * penalty));
                             defender.updateStats(); 
                             
+                            // NGƯỜI CHƠI TẠT ĐẦU CHẾT BOT -> PHÁT TIẾNG GIẾT NGƯỜI (LỚN)
                             if (defender.isPlayer) {
-                                playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 0.8);
-                                triggerShake(15, 18); // Rung khi giết bằng đâm
+                                playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 1.0);
+                                triggerShake(15, 18); 
 
                                 scoreEl.innerText = Math.floor(defender.score);
                                 let tauntArr = isTrangMode ? trangTaunts : fightTaunts;
@@ -895,13 +917,12 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
             
-            // --- XỬ LÝ RUNG MÀN HÌNH (SCREEN SHAKE) CHUẨN XÁC ---
             if (shakeFrames > 0) {
                 let dx = (Math.random() - 0.5) * shakeMagnitude;
                 let dy = (Math.random() - 0.5) * shakeMagnitude;
                 ctx.translate(dx, dy);
                 shakeFrames--;
-                shakeMagnitude *= 0.9; // Lực rung giảm dần
+                shakeMagnitude *= 0.9; 
             }
 
             if (gameState === 'playing') {
