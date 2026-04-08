@@ -8,229 +8,205 @@
         body { margin: 0; padding: 0; background-color: #0b0c10; overflow: hidden; touch-action: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; }
         canvas { display: block; }
         #ui { position: absolute; top: 15px; left: 15px; font-size: clamp(16px, 4vw, 24px); font-weight: bold; pointer-events: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); display: none; z-index: 10; }
-        #boost-container { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 24px; background-color: rgba(0, 0, 0, 0.8); border: 2px solid #34495e; border-radius: 12px; display: none; z-index: 10; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        #level-label { position: absolute; left: 15px; top: 0; line-height: 24px; font-size: clamp(10px, 3vw, 14px); font-weight: 900; color: white; z-index: 2; text-shadow: 1px 1px 2px black; letter-spacing: 1px; }
-        #boost-bar { width: 0%; height: 100%; background: #2ecc71; border-radius: 10px; transition: width 0.2s ease-out, background 0.5s; }
-        #leaderboard { position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; font-size: 14px; border: 2px solid #0f3460; display: none; z-index: 10; width: 150px; transition: all 0.3s; pointer-events: none; }
-        @media (max-width: 768px) { #leaderboard { width: 110px; font-size: 11px; padding: 8px; } }
-        #leaderboard h3 { margin: 0 0 8px 0; font-size: clamp(11px, 3vw, 14px); color: #e94560; text-align: center; border-bottom: 1px solid #555; padding-bottom: 5px; }
-        .lb-entry { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 1em; }
-        .lb-me { background: rgba(255, 255, 255, 0.1); padding: 2px 5px; border-radius: 5px; color: #f1c40f;}
-        .rank-1 { color: #f1c40f; font-weight: 900; text-shadow: 0 0 5px #f1c40f; }
-        #menu-screen, #game-over-screen { position: absolute; top: 0; left: 0; width: 100vw; min-height: 100vh; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 20; padding: 5vh 20px 20px 20px; box-sizing: border-box; overflow-y: auto; }
-        #menu-screen { background: radial-gradient(circle at center, #2c3e50 0%, #0b0c10 100%); background-size: 200% 200%; animation: gradientMove 10s ease infinite; }
-        #game-over-screen { background-color: rgba(0, 0, 0, 0.9); display: none; justify-content: center; }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        h1 { font-size: clamp(24px, 8vw, 55px); color: #e94560; text-align: center; text-shadow: 0 0 20px #e94560, 0 0 5px #fff; margin: 10px 0 5px 0; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;}
-        .author-text { font-family: 'Courier New', Courier, monospace; color: #00ffff; font-size: clamp(12px, 4vw, 16px); text-shadow: 0 0 10px #00ffff; margin-bottom: 20px; letter-spacing: 1px; text-align: center;}
-        .setup-box { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin-bottom: 20px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05); box-sizing: border-box; }
-        input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 5vw, 18px); text-align: center; border-radius: 8px; border: 2px solid rgba(52, 152, 219, 0.5); background: rgba(0,0,0,0.3); color: white; font-weight: bold; outline: none; }
-        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(16px, 5vw, 20px); text-shadow: 1px 1px 2px black; padding: 12px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
-        select { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; font-weight: bold; border: 2px solid #f1c40f; }
-        .start-btn { padding: 15px; font-size: clamp(20px, 6vw, 26px); font-weight: 900; color: #fff; background: linear-gradient(45deg, #e94560, #c0392b); border: none; border-radius: 50px; cursor: pointer; width: 100%; max-width: 360px; letter-spacing: 2px; }
-        #joystick-zone { position: absolute; bottom: 20px; left: 20px; width: 120px; height: 120px; z-index: 15; display: none; touch-action: none; }
-        #joystick-base { width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%; position: relative; }
-        #joystick-knob { width: 50px; height: 50px; background: radial-gradient(circle, #3498db, #2980b9); border: 2px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        #mobile-controls { position: absolute; bottom: 20px; right: 20px; width: 140px; height: 140px; display: none; z-index: 15; }
-        .action-btn { position: absolute; width: 55px; height: 55px; border-radius: 50%; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255, 255, 255, 0.3); color: white; font-weight: bold; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #btn-fire { top: 0; left: 0; border-color: #ff4757; color: #ff4757; }
-        #btn-dash { bottom: 0; left: -30px; border-color: #00ffff; color: #00ffff; }
-        #btn-boost { bottom: -10px; right: -10px; border-color: #f1c40f; color: #f1c40f; width: 75px; height: 75px; }
+        #boost-container { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 24px; background: rgba(0,0,0,0.8); border: 2px solid #34495e; border-radius: 12px; display: none; z-index: 10; overflow: hidden; }
+        #boost-bar { width: 0%; height: 100%; background: #2ecc71; transition: width 0.2s; }
+        #leaderboard { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 10px; border: 2px solid #0f3460; display: none; z-index: 10; width: 140px; pointer-events: none; }
+        #menu-screen, #game-over-screen { position: absolute; top: 0; left: 0; width: 100vw; height: 100%; display: flex; flex-direction: column; align-items: center; z-index: 20; padding: 20px; box-sizing: border-box; overflow-y: auto; background: radial-gradient(circle, #2c3e50, #0b0c10); }
+        #game-over-screen { display: none; background: rgba(0,0,0,0.9); justify-content: center; }
+        .setup-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; backdrop-filter: blur(10px); }
+        input, select, .btn { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #3498db; background: rgba(0,0,0,0.5); color: white; font-weight: bold; box-sizing: border-box; text-align: center; outline: none; }
+        .start-btn { background: linear-gradient(45deg, #e94560, #c0392b); border: none; font-size: 24px; padding: 15px; cursor: pointer; border-radius: 50px; margin-top: 10px; }
+        #joystick-zone { position: absolute; bottom: 30px; left: 30px; width: 120px; height: 120px; display: none; }
+        #joystick-base { width: 100%; height: 100%; background: rgba(255,255,255,0.1); border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); position: relative; }
+        #joystick-knob { width: 50px; height: 50px; background: #3498db; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        #mobile-controls { position: absolute; bottom: 30px; right: 30px; display: none; gap: 10px; }
+        .action-btn { width: 60px; height: 60px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; }
     </style>
 </head>
 <body>
     <div id="ui">Điểm: <span id="score">0</span></div>
-    <div id="boost-container"><div id="level-label">CẤP 1</div><div id="boost-bar"></div></div>
-    <div id="leaderboard"><h3>BẢNG XẾP HẠNG</h3><div id="lb-content"></div></div>
+    <div id="boost-container"><div id="boost-bar"></div></div>
+    <div id="leaderboard"><h3>BXH</h3><div id="lb-content"></div></div>
+
     <div id="joystick-zone"><div id="joystick-base"><div id="joystick-knob"></div></div></div>
     <div id="mobile-controls">
-        <div class="action-btn" id="btn-fire"><span>🔥</span>Khạc</div>
-        <div class="action-btn" id="btn-dash"><span>⚡</span>Lướt</div>
-        <div class="action-btn" id="btn-boost"><span>🚀</span>Ga</div>
+        <div class="action-btn" id="btn-fire">🔥</div>
+        <div class="action-btn" id="btn-dash">⚡</div>
     </div>
+
     <div id="menu-screen">
-        <h1>MÀY CHAN BỐ MÀY ĐI.IO</h1>
-        <div class="author-text">Created by Đức Đẹp Trai</div>
+        <h1 style="color:#e94560; font-size: 40px;">MÀY CHAN BỐ MÀY ĐI</h1>
         <div class="setup-box">
-            <input type="text" id="player-name" value="Player" maxlength="15">
-            <input type="text" id="cheat-input" placeholder="MÃ HACK (NẾU CÓ)..." autocomplete="off">
-            <button class="skin-btn" id="skin-toggle" onclick="changeSkin()">😎 CHUẨN MEN</button>
-            <select id="diff-select" onchange="checkMoreModes()">
-                <option value="1">Độ khó: Dễ</option>
-                <option value="2">Độ khó: Khó</option>
-                <option value="3">ĐỘ KHÓ: ĐỨC VIPPRO 🔥</option>
+            <input type="text" id="player-name" value="Player">
+            <input type="text" id="cheat-input" placeholder="MÃ HACK (NẾU CÓ)...">
+            <select id="diff-select" onchange="document.getElementById('more-modes').style.display=(this.value==='more'?'block':'none')">
+                <option value="1">Dễ (Gà Mờ)</option>
+                <option value="2">Khó (Chiến Trường)</option>
+                <option value="3">ĐỨC VIPPRO 🔥</option>
                 <option value="more">--- More ---</option>
             </select>
-            <select id="more-modes" style="display:none; border-color: #ff9ff3;"><option value="trang">👑 Chế độ: Hoàng Mai Trang</option></select>
+            <select id="more-modes" style="display:none; border-color:#ff9ff3;"><option value="trang">👑 Hoàng Mai Trang</option></select>
+            <button class="start-btn" onclick="startGame()">VÀO ĐỜI</button>
         </div>
-        <button class="start-btn" onclick="startGame()">VÀO ĐỜI</button>
     </div>
+
     <div id="game-over-screen">
-        <h1>CHẾT NHĂN RĂNG!</h1>
-        <div id="death-text" style="color:#f1c40f; font-weight:bold; font-size: 24px; text-align:center; padding: 20px;"></div>
-        <div style="font-size: 20px;">Điểm: <span id="final-score" style="color:#e94560;">0</span></div>
-        <button class="start-btn" style="margin-top: 20px;" onclick="showMenu()">LÀM LẠI CUỘC ĐỜI</button>
+        <h1 id="death-title">CHẾT NHĂN RĂNG!</h1>
+        <p id="death-text" style="color:#f1c40f; font-size:20px; text-align:center;"></p>
+        <button class="start-btn" onclick="location.reload()">LÀM LẠI CUỘC ĐỜI</button>
     </div>
+
     <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d');
-        const uiEl = document.getElementById('ui'), scoreEl = document.getElementById('score'), lbContent = document.getElementById('lb-content'), menuScreen = document.getElementById('menu-screen'), gameOverScreen = document.getElementById('game-over-screen'), finalScoreEl = document.getElementById('final-score'), deathTextEl = document.getElementById('death-text'), boostBar = document.getElementById('boost-bar'), levelLabel = document.getElementById('level-label');
-        const bgm = new Audio('bgm.mp3'); bgm.loop = true; bgm.volume = 0.2; // NHẠC NỀN NHỎ LẠI
+        const bgm = new Audio('bgm.mp3'); bgm.loop = true; bgm.volume = 0.2;
         const killSounds = ['kill1.mp3', 'kill2.mp3', 'kill3.mp3', 'kill4.mp3', 'kill5.mp3'];
-        
-        function playSFX(src, vol = 1.0) { // SFX ĐỂ LỚN (MẶC ĐỊNH 1.0)
-            let sound = new Audio(src); sound.volume = vol; sound.play().catch(e => {});
+        function playSFX(s, v=1.0) { let a = new Audio(s); a.volume = v; a.play().catch(()=>{}); }
+
+        const wallTaunts = ["Mù à đâm tường? Thay kính đi em!", "Tường ngon không? Nhai kỹ vào!", "Bố mẹ cho ăn học để đi đâm tường à?", "Mắt để ở mông hay sao mà lái thế?"];
+        const killTaunts = ["Bị {name} vả cho sang chấn tâm lý!", "Quỳ xuống gọi {name} là bố đi con!", "Trình này đi chăn vịt đi, tuổi gì với {name}!"];
+
+        let player, bots = [], foods = [], projectiles = [], floatingTexts = [];
+        let gameState = 'menu', worldSize = 3000, camera = {x:0, y:0}, zoom = 1, shake = 0, shakeMag = 0, isCheat = false;
+
+        class Snake {
+            constructor(name, isP, x, y, color, emoji) {
+                this.name = name; this.isP = isP; this.x = x; this.y = y; this.color = color; this.emoji = emoji;
+                this.score = 50; this.size = 15; this.angle = Math.random()*Math.PI*2; this.segments = [];
+                this.hp = 100; this.maxHp = 100; this.speed = 5; this.dash = 0;
+                for(let i=0; i<10; i++) this.segments.push({x:x, y:y});
+            }
+            update() {
+                this.size = 15 + Math.sqrt(this.score)*0.4;
+                let s = (this.dash > 0 ? 12 : 5) * (this.isP && isCheat ? 1.5 : 1);
+                this.x += Math.cos(this.angle) * s; this.y += Math.sin(this.angle) * s;
+                this.segments.unshift({x: this.x, y: this.y});
+                if(this.segments.length > this.score/5 + 5) this.segments.pop();
+                if(this.dash > 0) this.dash--;
+                if(this.hp < this.maxHp) this.hp += 0.1;
+            }
         }
 
-        // CÂU KHỊA SIÊU MẶN
-        const wallTaunts = [
-            "Mù à mà đâm tường? Đi thay kính đi em!",
-            "Tường ngon không? Nhai kỹ vào nhé!",
-            "Lái ngu vầy thì đi bộ cho nó lành sếp ơi.",
-            "Bố mẹ cho ăn học để rồi đi đâm tường à?",
-            "Mắt để dưới gầm giường hay để ở mông mà đâm vậy?",
-            "Phí cả cơm nước, đâm tường vỡ thớt cmnr!"
-        ];
-        const killTaunts = [
-            "Bị {name} nó vả cho sang chấn tâm lý!",
-            "Quỳ xuống gọi {name} là bố đi con trai.",
-            "Trình này đi chăn vịt đi, chơi bời gì với {name}!",
-            "Thấy {name} thì né ra, đâm đầu vào làm gì?",
-            "Bị {name} nó nhét hành ngập mõm rồi kìa!",
-            "Tuổi tôm đòi chan cơm với {name} à?"
-        ];
-
-        let shakeFrames = 0, shakeMagnitude = 0;
-        function triggerShake(f, m) { shakeFrames = f; shakeMagnitude = m; }
-
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-        let player, bots = [], foods = [], projectiles = [], floatingTexts = [];
-        let gameState = 'menu', currentZoom = 1, camera = {x:0, y:0}, isCheatActive = false, gameSpeedMulti = 1, difficultyLvl = 1, currentWorldSize = 2500;
-
-        function checkMoreModes() { document.getElementById('more-modes').style.display = document.getElementById('diff-select').value === 'more' ? 'block' : 'none'; }
+        function spawnBot() { bots.push(new Snake("Bot "+bots.length, false, (Math.random()-0.5)*worldSize, (Math.random()-0.5)*worldSize, "hsl("+Math.random()*360+",70%,50%)", "🐍")); }
+        function spawnFood() { foods.push({x:(Math.random()-0.5)*worldSize, y:(Math.random()-0.5)*worldSize, s:Math.random()*5+5, c:"hsl("+Math.random()*360+",80%,60%)"}); }
 
         function startGame() {
-            isCheatActive = document.getElementById('cheat-input').value.trim().toLowerCase() === "ducdeptrais1tg";
-            let pName = document.getElementById('player-name').value || "Player";
-            let dVal = document.getElementById('diff-select').value;
-            let isTrang = (dVal === 'more' && document.getElementById('more-modes').value === 'trang');
-            difficultyLvl = isTrang ? 2 : parseInt(dVal);
-            gameSpeedMulti = difficultyLvl === 1 ? 1 : 1.3;
+            isCheat = document.getElementById('cheat-input').value.toLowerCase() === "ducdeptrais1tg";
+            player = new Snake(document.getElementById('player-name').value, true, 0, 0, "#3498db", "😎");
+            for(let i=0; i<40; i++) spawnBot();
+            for(let i=0; i<400; i++) spawnFood();
+            document.getElementById('menu-screen').style.display='none';
+            document.getElementById('ui').style.display='block';
+            if(isTouchDevice) { document.getElementById('joystick-zone').style.display='block'; document.getElementById('mobile-controls').style.display='flex'; }
+            bgm.play().catch(()=>{}); gameState = 'playing';
+        }
+
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        let joyActive = false, joyDir = {x:0, y:0};
+        
+        // Joystick Logic
+        document.getElementById('joystick-zone').ontouchstart = (e) => { joyActive = true; };
+        window.ontouchmove = (e) => {
+            if(!joyActive) return;
+            let touch = e.touches[0]; let rect = document.getElementById('joystick-base').getBoundingClientRect();
+            let dx = touch.clientX - (rect.left + 60), dy = touch.clientY - (rect.top + 60);
+            let dist = Math.sqrt(dx*dx+dy*dy);
+            joyDir = {x: dx/dist, y: dy/dist};
+            let k = document.getElementById('joystick-knob');
+            let lim = Math.min(dist, 40);
+            k.style.left = 50 + (dx/dist*lim)*0.8 + '%'; k.style.top = 50 + (dy/dist*lim)*0.8 + '%';
+            player.angle = Math.atan2(dy, dx);
+        };
+        window.ontouchend = () => { joyActive = false; document.getElementById('joystick-knob').style.left='50%'; document.getElementById('joystick-knob').style.top='50%'; };
+
+        // Keyboard & Mouse
+        window.onmousemove = (e) => { if(!isTouchDevice && player) player.angle = Math.atan2(e.clientY - canvas.height/2, e.clientX - canvas.width/2); };
+        window.onkeydown = (e) => { 
+            if(e.code === 'Space') player.dash = 20; 
+            if(e.key === 'q') shoot(player);
+        };
+        document.getElementById('btn-fire').ontouchstart = () => shoot(player);
+        document.getElementById('btn-dash').ontouchstart = () => player.dash = 20;
+
+        function shoot(s) {
+            if(s.score < 100 && !isCheat) return;
+            if(!isCheat) s.score -= 100;
+            if(s.isP) playSFX('shoot.mp3', 1.0);
+            projectiles.push({x: s.x, y: s.y, a: s.angle, owner: s, life: 100});
+        }
+
+        function loop() {
+            requestAnimationFrame(loop);
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            if(gameState !== 'playing') return;
+
+            player.update();
+            camera.x = player.x; camera.y = player.y;
             
-            menuScreen.style.display = 'none'; gameOverScreen.style.display = 'none'; uiEl.style.display = 'block';
-            if (isTouchDevice) { document.getElementById('mobile-controls').style.display = 'block'; document.getElementById('joystick-zone').style.display = 'block'; }
-            
-            bgm.play().catch(e => {});
-            player = new Snake(pName, true, 50, 0, 0, skins[currentSkinIdx]);
-            bots = []; for(let i=0; i<(difficultyLvl*30 + 10); i++) spawnBot();
-            foods = []; for(let i=0; i<300; i++) spawnFood();
-            gameState = 'playing';
-        }
+            // Xử lý va chạm food
+            foods.forEach((f, i) => {
+                if(Math.hypot(player.x-f.x, player.y-f.y) < player.size + f.s) { player.score += 5; foods.splice(i,1); spawnFood(); scoreEl.innerText = player.score; }
+            });
 
-        function gameOver(killer) {
-            gameState = 'gameover';
-            deathTextEl.innerText = !killer ? wallTaunts[Math.floor(Math.random()*wallTaunts.length)] : killTaunts[Math.floor(Math.random()*killTaunts.length)].replace(/{name}/g, killer);
-            finalScoreEl.innerText = Math.floor(player.score);
-            gameOverScreen.style.display = 'flex'; uiEl.style.display = 'none';
-            document.getElementById('mobile-controls').style.display = 'none'; document.getElementById('joystick-zone').style.display = 'none';
-            bgm.pause(); bgm.currentTime = 0;
-            playSFX('die.mp3', 1.0); // ÂM THANH KHI CHẾT
-            triggerShake(30, 20);
-        }
-
-        // --- CÁC HÀM CƠ BẢN (GIỮ NGUYÊN LOGIC NHƯNG TỐI ƯU GỌN) ---
-        class Snake {
-            constructor(name, isP, score, x, y, skin) {
-                this.name = name; this.isPlayer = isP; this.score = score;
-                this.size = 14; this.speed = 4.5 * gameSpeedMulti; this.angle = Math.random()*Math.PI*2;
-                this.segments = []; this.hp = 100; this.maxHp = 100; this.shootCooldown = 0; this.dashFrames = 0;
-                for(let i=0; i<5; i++) this.segments.push({x:x, y:y});
-                this.emoji = skin ? skin.emoji : "🐍"; this.color = skin ? skin.body : "#fff";
-            }
-            updateStats() { this.size = 14 + Math.sqrt(this.score)*0.4; this.speed = (4.5 + this.score/600)*gameSpeedMulti; }
-        }
-
-        function spawnBot() { bots.push(new Snake("Bot "+Math.floor(Math.random()*100), false, 50 + Math.random()*500, (Math.random()-0.5)*4000, (Math.random()-0.5)*4000, skins[Math.floor(Math.random()*skins.length)])); }
-        function spawnFood() { foods.push({x:(Math.random()-0.5)*5000, y:(Math.random()-0.5)*5000, size: Math.random()*5+5, color: `hsl(${Math.random()*360}, 70%, 50%)`}); }
-
-        function shoot(owner) {
-            if (owner.shootCooldown > 0 && !isCheatActive) return;
-            if (owner.score < 150 && !isCheatActive) return;
-            if (!isCheatActive) owner.score -= 150;
-            owner.shootCooldown = isCheatActive ? 3 : 60;
-            if (owner.isPlayer) playSFX('shoot.mp3', 1.0); // TIẾNG BẮN LỚN
-            projectiles.push({x: owner.segments[0].x, y: owner.segments[0].y, vx: Math.cos(owner.angle)*25, vy: Math.sin(owner.angle)*25, owner: owner, life: 100});
-        }
-
-        function triggerDash(s) {
-            if (s.score < 50 && !isCheatActive) return;
-            if (s.dashFrames > 0 && !isCheatActive) return;
-            s.dashFrames = 15; if(!isCheatActive) s.score -= 50;
-        }
-
-        // --- LOOP GAME (SHAKE + RENDER) ---
-        function update() {
-            requestAnimationFrame(update);
-            if (gameState !== 'playing') { draw(); return; }
-            
-            // Logic di chuyển Player (Joystick)
-            if (isTouchDevice && joyActive) {
-                // Đã có trong các bản trước, sếp cứ giữ nguyên logic Joystick cũ nhé
-            }
-
-            // Xử lý va chạm đạn & chết
-            projectiles.forEach((p, idx) => {
-                p.x += p.vx; p.y += p.vy; p.life--;
-                [player, ...bots].forEach(s => {
-                    if (s === p.owner || s.dead) return;
-                    let dx = s.segments[0].x - p.x, dy = s.segments[0].y - p.y;
-                    if (Math.sqrt(dx*dx + dy*dy) < s.size + 10) {
-                        s.hp -= 50; p.life = 0;
-                        if (p.owner.isPlayer) triggerShake(10, 5);
-                        if (s.hp <= 0) {
-                            s.dead = true;
-                            if (s.isPlayer) gameOver(p.owner.name);
-                            else if (p.owner.isPlayer) {
-                                playSFX(killSounds[Math.floor(Math.random()*5)], 1.0); // TIẾNG GIẾT LỚN
-                                triggerShake(15, 12);
-                            }
+            // Xử lý đạn
+            projectiles.forEach((p, i) => {
+                p.x += Math.cos(p.a)*20; p.y += Math.sin(p.a)*20; p.life--;
+                bots.forEach(b => {
+                    if(Math.hypot(p.x-b.x, p.y-b.y) < b.size + 10) {
+                        b.hp -= 40; p.life = 0;
+                        if(b.hp <= 0) {
+                            b.dead = true; playSFX(killSounds[Math.floor(Math.random()*5)], 1.0);
+                            player.score += 200; shake = 15; shakeMag = 15;
                         }
                     }
                 });
-                if (p.life <= 0) projectiles.splice(idx, 1);
+                if(p.life <= 0) projectiles.splice(i, 1);
             });
 
-            // Ăn rắn (Tạt đầu)
-            bots.forEach(b => {
-                let dx = player.segments[0].x - b.segments[0].x, dy = player.segments[0].y - b.segments[0].y;
-                if (Math.sqrt(dx*dx + dy*dy) < player.size + b.size) {
-                    // Logic check tạt đầu cơ bản
-                    if (Math.random() > 0.5) { gameOver(b.name); } else { 
-                        b.dead = true; 
-                        playSFX(killSounds[Math.floor(Math.random()*5)], 1.0);
-                        triggerShake(15, 15);
-                    }
-                }
-            });
+            // Check chết đâm tường
+            if(Math.abs(player.x) > worldSize/2 || Math.abs(player.y) > worldSize/2) die(null);
 
             draw();
         }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save();
-            if (shakeFrames > 0) { ctx.translate((Math.random()-0.5)*shakeMagnitude, (Math.random()-0.5)*shakeMagnitude); shakeFrames--; }
-            // ... Phần vẽ Canvas cũ sếp bê nguyên vào đây nhé (Vẽ rắn, thức ăn, map) ...
-            ctx.restore();
+        function die(killer) {
+            gameState = 'over';
+            document.getElementById('game-over-screen').style.display='flex';
+            document.getElementById('death-text').innerText = killer ? killTaunts[0].replace("{name}", killer) : wallTaunts[Math.floor(Math.random()*wallTaunts.length)];
+            bgm.pause(); playSFX('die.mp3', 1.0);
         }
 
-        // --- KHỞI TẠO CÁC NÚT BẤM ---
-        document.getElementById('btn-fire').onclick = () => shoot(player);
-        document.getElementById('btn-dash').onclick = () => triggerDash(player);
-        function showMenu() { location.reload(); } // Load lại cho sạch sẽ
+        function draw() {
+            ctx.fillStyle = '#0b0c10'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.save();
+            if(shake > 0) { ctx.translate((Math.random()-0.5)*shakeMag, (Math.random()-0.5)*shakeMag); shake--; }
+            ctx.translate(canvas.width/2 - camera.x, canvas.height/2 - camera.y);
 
-        window.onload = () => { resize(); update(); };
+            // Vẽ tường
+            ctx.strokeStyle = '#e94560'; ctx.lineWidth = 10; ctx.strokeRect(-worldSize/2, -worldSize/2, worldSize, worldSize);
+
+            // Vẽ Food
+            foods.forEach(f => { ctx.fillStyle = f.c; ctx.beginPath(); ctx.arc(f.x, f.y, f.s, 0, Math.PI*2); ctx.fill(); });
+
+            // Vẽ Đạn
+            projectiles.forEach(p => { ctx.fillStyle='#00ffff'; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI*2); ctx.fill(); });
+
+            // Vẽ Rắn
+            [...bots, player].forEach(s => {
+                if(s.dead) return;
+                s.segments.forEach((seg, i) => {
+                    ctx.fillStyle = s.color; ctx.globalAlpha = 1 - (i/s.segments.length);
+                    ctx.beginPath(); ctx.arc(seg.x, seg.y, s.size * (1-i/s.segments.length*0.5), 0, Math.PI*2); ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+                ctx.font = (s.size*1.5)+"px Arial"; ctx.textAlign='center';
+                ctx.fillText(s.emoji, s.x, s.y + s.size/2);
+                ctx.font = "14px Arial"; ctx.fillStyle='white'; ctx.fillText(s.name, s.x, s.y - s.size - 5);
+            });
+            ctx.restore();
+        }
+        loop();
     </script>
 </body>
 </html>
