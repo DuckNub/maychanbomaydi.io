@@ -10,15 +10,6 @@
         
         #ui { position: absolute; top: 15px; left: 15px; font-size: clamp(16px, 4vw, 24px); font-weight: bold; pointer-events: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); display: none; z-index: 10; }
         
-        /* CHEAT INPUT */
-        #cheat-input {
-            position: absolute; top: 50px; left: 15px; width: 100px; background: rgba(0,0,0,0.6);
-            color: #00ffff; border: 1px solid #3498db; border-radius: 5px; padding: 6px;
-            font-size: 12px; z-index: 10; display: none; font-family: monospace; outline: none; transition: 0.3s;
-        }
-        #cheat-input:focus { border-color: #e94560; box-shadow: 0 0 10px rgba(233, 69, 96, 0.5); width: 140px; }
-
-        /* THANH CẤP ĐỘ */
         #boost-container { 
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%); 
             width: 90%; max-width: 400px; height: 24px; background-color: rgba(0, 0, 0, 0.8); 
@@ -27,13 +18,12 @@
         #level-label { position: absolute; left: 15px; top: 0; line-height: 24px; font-size: clamp(10px, 3vw, 14px); font-weight: 900; color: white; z-index: 2; text-shadow: 1px 1px 2px black; letter-spacing: 1px; }
         #boost-bar { width: 0%; height: 100%; background: #2ecc71; border-radius: 10px; transition: width 0.2s ease-out, background 0.5s; }
 
-        /* BẢNG XẾP HẠNG RESPONSIVE */
         #leaderboard { 
             position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.6); 
             padding: 10px; border-radius: 10px; font-size: 14px; border: 2px solid #0f3460; 
             display: none; z-index: 10; width: 150px; transition: all 0.3s; pointer-events: none;
         }
-        @media (max-width: 768px) { #leaderboard { width: 120px; font-size: 11px; padding: 8px; } }
+        @media (max-width: 768px) { #leaderboard { width: 110px; font-size: 11px; padding: 8px; } }
         #leaderboard h3 { margin: 0 0 8px 0; font-size: clamp(11px, 3vw, 14px); color: #e94560; text-align: center; border-bottom: 1px solid #555; padding-bottom: 5px; }
         .lb-entry { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 1em; }
         .lb-me { background: rgba(255, 255, 255, 0.1); padding: 2px 5px; border-radius: 5px; color: #f1c40f;}
@@ -49,58 +39,85 @@
         }
         .lightning-board { animation: lightningGlow 0.3s infinite alternate !important; border: 2px solid #fff !important; }
 
-        /* UI MENU XỊN XÒ - RESPONSIVE TỐI ĐA */
-        #menu-screen, #game-over-screen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 20; padding: 20px; box-sizing: border-box; }
+        /* UI MENU TỐI ƯU MOBILE KHÔNG BỊ TRÀN VIỀN */
+        #menu-screen, #game-over-screen { 
+            position: absolute; top: 0; left: 0; width: 100vw; min-height: 100vh; height: 100%;
+            display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
+            z-index: 20; padding: 5vh 20px 20px 20px; box-sizing: border-box; overflow-y: auto;
+        }
         
         #menu-screen {
             background: radial-gradient(circle at center, #2c3e50 0%, #0b0c10 100%);
             background-size: 200% 200%; animation: gradientMove 10s ease infinite;
         }
-        #game-over-screen { background-color: rgba(0, 0, 0, 0.85); display: none; }
+        #game-over-screen { background-color: rgba(0, 0, 0, 0.85); display: none; justify-content: center; }
 
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        h1 { font-size: clamp(30px, 8vw, 65px); color: #e94560; text-align: center; text-shadow: 0 0 25px #e94560, 0 0 5px #fff; margin-bottom: 5px; text-transform: uppercase; font-weight: 900; letter-spacing: 2px;}
-        .author-text { font-family: 'Courier New', Courier, monospace; color: #00ffff; font-size: clamp(12px, 4vw, 18px); text-shadow: 0 0 10px #00ffff; margin-bottom: 30px; letter-spacing: 2px; text-align: center;}
+        h1 { font-size: clamp(24px, 8vw, 55px); color: #e94560; text-align: center; text-shadow: 0 0 20px #e94560, 0 0 5px #fff; margin: 10px 0 5px 0; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;}
+        .author-text { font-family: 'Courier New', Courier, monospace; color: #00ffff; font-size: clamp(12px, 4vw, 16px); text-shadow: 0 0 10px #00ffff; margin-bottom: 20px; letter-spacing: 1px; text-align: center;}
 
         .setup-box { 
-            display: flex; flex-direction: column; gap: 15px; 
-            width: 100%; max-width: 380px; margin-bottom: 30px; 
+            display: flex; flex-direction: column; gap: 10px; 
+            width: 100%; max-width: 360px; margin-bottom: 20px; 
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 25px; border-radius: 20px;
+            padding: 20px; border-radius: 15px;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
-            box-sizing: border-box;
+            box-sizing: border-box; flex-shrink: 0;
         }
-        .input-label { font-size: 14px; color: #f1c40f; font-weight: bold; text-align: left; margin-bottom: -10px; text-transform: uppercase; letter-spacing: 1px;}
-        input[type="text"]:not(#cheat-input) { width: 100%; box-sizing: border-box; padding: 15px; font-size: clamp(16px, 5vw, 20px); text-align: center; border-radius: 10px; border: 2px solid rgba(52, 152, 219, 0.5); background: rgba(0,0,0,0.3); color: white; font-weight: bold; outline: none; transition: 0.3s; }
-        input[type="text"]:not(#cheat-input):focus { border-color: #e94560; box-shadow: 0 0 15px rgba(233, 69, 96, 0.5); background: rgba(0,0,0,0.6); }
+        .input-label { font-size: 12px; color: #f1c40f; font-weight: bold; text-align: left; margin-bottom: -5px; text-transform: uppercase; letter-spacing: 1px;}
+        input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 5vw, 18px); text-align: center; border-radius: 8px; border: 2px solid rgba(52, 152, 219, 0.5); background: rgba(0,0,0,0.3); color: white; font-weight: bold; outline: none; transition: 0.3s; }
+        input[type="text"]:focus { border-color: #e94560; box-shadow: 0 0 10px rgba(233, 69, 96, 0.5); background: rgba(0,0,0,0.6); }
         
-        select, .skin-btn { width: 100%; box-sizing: border-box; padding: 15px; font-size: clamp(14px, 4vw, 18px); font-weight: bold; border-radius: 10px; border: 2px solid rgba(241, 196, 15, 0.5); background: rgba(0,0,0,0.3); color: white; cursor: pointer; text-align: center; outline: none; transition: 0.3s; }
-        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(18px, 5vw, 22px); text-shadow: 1px 1px 2px black;}
+        #cheat-input { border-color: rgba(46, 204, 113, 0.5); color: #00ffff; font-family: monospace; font-size: 14px;}
+        #cheat-input:focus { border-color: #2ecc71; box-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
+
+        select, .skin-btn { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 4vw, 16px); font-weight: bold; border-radius: 8px; border: 2px solid rgba(241, 196, 15, 0.5); background: rgba(0,0,0,0.3); color: white; cursor: pointer; text-align: center; outline: none; transition: 0.3s; }
+        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(16px, 5vw, 20px); text-shadow: 1px 1px 2px black;}
+        .skin-btn:active { filter: brightness(1.2); transform: translateY(-2px); }
         
         select option { background: #1a1a2e; color: white; }
         select option.vippro { color: #e94560; font-weight: 900; }
-        select option.trangmode { color: #ff9ff3; font-weight: 900; }
+        #more-modes { border-color: #ff9ff3; display: none; margin-top: 5px; animation: fadeIn 0.3s;}
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .start-btn { 
-            padding: 15px; font-size: clamp(20px, 6vw, 28px); font-weight: 900; color: #fff; 
+            padding: 15px; font-size: clamp(20px, 6vw, 26px); font-weight: 900; color: #fff; 
             background: linear-gradient(45deg, #e94560, #c0392b); border: none; border-radius: 50px; 
             cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px rgba(233, 69, 96, 0.4); 
-            text-transform: uppercase; width: 100%; max-width: 380px; letter-spacing: 2px;
+            text-transform: uppercase; width: 100%; max-width: 360px; letter-spacing: 2px; flex-shrink: 0;
         }
         .start-btn:active { transform: scale(0.95); }
-        .death-reason { font-size: clamp(20px, 6vw, 28px); margin-bottom: 20px; color: #f1c40f; font-weight: bold; text-align: center; max-width: 100%; line-height: 1.4; text-shadow: 0 0 10px red;}
+        .death-reason { font-size: clamp(18px, 5vw, 24px); margin-bottom: 20px; color: #f1c40f; font-weight: bold; text-align: center; max-width: 100%; line-height: 1.4; text-shadow: 0 0 10px red;}
         
-        .hint { font-size: clamp(12px, 3vw, 14px); color: #bdc3c7; margin-top: 20px; text-align: center; line-height: 1.6; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 380px; box-sizing: border-box; }
+        .hint { font-size: clamp(11px, 3vw, 13px); color: #bdc3c7; margin-top: 15px; margin-bottom: 30px; text-align: center; line-height: 1.6; background: rgba(0,0,0,0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 360px; box-sizing: border-box; flex-shrink: 0;}
 
-        /* VIRTUAL CONTROLS DÀNH RIÊNG CHO ĐIỆN THOẠI */
+        /* JOYSTICK DÀNH CHO MOBILE */
+        #joystick-zone {
+            position: absolute; bottom: 20px; left: 20px;
+            width: 120px; height: 120px; z-index: 15;
+            display: none; touch-action: none;
+        }
+        #joystick-base {
+            width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
+            position: relative; box-sizing: border-box; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+        #joystick-knob {
+            width: 50px; height: 50px; background: radial-gradient(circle, #3498db, #2980b9);
+            border: 2px solid #fff; border-radius: 50%; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.05s;
+        }
+
+        /* NÚT CHIÊU THỨC DÀNH CHO MOBILE */
         #mobile-controls {
             position: absolute; bottom: 20px; right: 20px;
             width: 140px; height: 140px;
-            display: none; /* Sẽ được bật bằng JS nếu là màn hình cảm ứng */
-            z-index: 15;
+            display: none; z-index: 15;
         }
         .action-btn {
             position: absolute; width: 55px; height: 55px;
@@ -117,13 +134,12 @@
         
         #btn-fire { top: 0; left: 0; border-color: #ff4757; color: #ff4757; }
         #btn-dash { bottom: 0; left: -30px; border-color: #00ffff; color: #00ffff; }
-        #btn-boost { bottom: -10px; right: -10px; border-color: #f1c40f; color: #f1c40f; width: 75px; height: 75px; } /* Nút Tăng tốc bự nhất */
+        #btn-boost { bottom: -10px; right: -10px; border-color: #f1c40f; color: #f1c40f; width: 75px; height: 75px; } 
     </style>
 </head>
 <body>
 
     <div id="ui">Điểm: <span id="score">0</span></div>
-    <input type="text" id="cheat-input" placeholder="Hack..." autocomplete="off">
     
     <div id="boost-container">
         <div id="level-label">CẤP 1</div>
@@ -131,6 +147,11 @@
     </div>
     <div id="leaderboard"><h3>BẢNG XẾP HẠNG</h3><div id="lb-content"></div></div>
 
+    <div id="joystick-zone">
+        <div id="joystick-base">
+            <div id="joystick-knob"></div>
+        </div>
+    </div>
     <div id="mobile-controls">
         <div class="action-btn" id="btn-fire"><span>🔥</span>Khạc</div>
         <div class="action-btn" id="btn-dash"><span>⚡</span>Lướt</div>
@@ -144,37 +165,48 @@
         <div class="setup-box">
             <div class="input-label">TÊN HIỂN THỊ:</div>
             <input type="text" id="player-name" value="Player" maxlength="15" placeholder="Nhập tên...">
-            <button class="skin-btn" id="skin-toggle" onclick="changeSkin()">😎 CHUẨN MEN</button>
-            <select id="diff-select">
+            
+            <div class="input-label" style="margin-top: 5px;">MÃ HACK (NẾU CÓ):</div>
+            <input type="text" id="cheat-input" placeholder="Nhập lệnh hack..." autocomplete="off">
+
+            <button class="skin-btn" id="skin-toggle" style="margin-top: 5px;" onclick="changeSkin()">😎 CHUẨN MEN</button>
+            
+            <select id="diff-select" onchange="checkMoreModes()">
                 <option value="1">Độ khó: Dễ (Gà Mờ)</option>
                 <option value="2">Độ khó: Khó (Chiến Trường)</option>
                 <option value="3" class="vippro">ĐỘ KHÓ: ĐỨC VIPPRO 🔥</option>
-                <option value="4" class="trangmode">Chế độ: Hoàng Mai Trang 👑</option>
+                <option value="more" style="color: #00ffff; font-weight: bold;">--- Xem Thêm (More) ---</option>
+            </select>
+            
+            <select id="more-modes">
+                <option value="trang" style="color: #ff9ff3; font-weight: bold;">👑 Chế độ: Hoàng Mai Trang</option>
             </select>
         </div>
 
         <button class="start-btn" onclick="startGame()">VÀO ĐỜI</button>
         <div class="hint">
             <strong>PC:</strong> Chuột (Di chuyển) | Space (Tăng tốc) | E (Lướt) | Q (Khạc lửa)<br>
-            <strong>Mobile:</strong> Vuốt màn hình để lái | Chạm nút ảo để xuất chiêu<br>
+            <strong>Mobile:</strong> Kéo Joystick trái để lái | Bấm nút phải để xả skill<br>
             <span style="color: #2ecc71;">Ăn cục [+] để Hồi Máu</span>
         </div>
     </div>
 
     <div id="game-over-screen">
-        <h1 style="font-size: clamp(40px, 8vw, 60px);">CHẾT NHĂN RĂNG!</h1>
+        <h1 style="font-size: clamp(35px, 8vw, 60px);">CHẾT NHĂN RĂNG!</h1>
         <div id="death-text" class="death-reason">Mày đâm đầu vào tường rồi!</div>
-        <div class="death-reason" style="margin-top: -15px; color: #ccc; font-size: clamp(16px, 4vw, 20px); text-shadow: none;">Điểm Tích lũy: <span id="final-score" style="color: #e94560; font-weight: bold;">0</span></div>
-        <button class="start-btn" style="margin-top: 20px;" onclick="showMenu()">LÀM LẠI</button>
+        <div class="death-reason" style="margin-top: -15px; color: #ccc; font-size: clamp(14px, 4vw, 20px); text-shadow: none;">Điểm Tích lũy: <span id="final-score" style="color: #e94560; font-weight: bold;">0</span></div>
+        <button class="start-btn" style="margin-top: 20px; max-width: 250px;" onclick="showMenu()">LÀM LẠI</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d');
-        const uiEl = document.getElementById('ui'), scoreEl = document.getElementById('score'), lbContent = document.getElementById('lb-content'), menuScreen = document.getElementById('menu-screen'), gameOverScreen = document.getElementById('game-over-screen'), finalScoreEl = document.getElementById('final-score'), deathTextEl = document.getElementById('death-text'), boostContainer = document.getElementById('boost-container'), boostBar = document.getElementById('boost-bar'), levelLabel = document.getElementById('level-label'), leaderboardEl = document.getElementById('leaderboard'), cheatInput = document.getElementById('cheat-input'), mobileControls = document.getElementById('mobile-controls');
+        const uiEl = document.getElementById('ui'), scoreEl = document.getElementById('score'), lbContent = document.getElementById('lb-content'), menuScreen = document.getElementById('menu-screen'), gameOverScreen = document.getElementById('game-over-screen'), finalScoreEl = document.getElementById('final-score'), deathTextEl = document.getElementById('death-text'), boostContainer = document.getElementById('boost-container'), boostBar = document.getElementById('boost-bar'), levelLabel = document.getElementById('level-label'), leaderboardEl = document.getElementById('leaderboard');
+        const cheatInput = document.getElementById('cheat-input');
+        const mobileControls = document.getElementById('mobile-controls'), joystickZone = document.getElementById('joystick-zone'), joystickKnob = document.getElementById('joystick-knob');
+        const moreModesDropdown = document.getElementById('more-modes');
 
-        // Nhận diện thiết bị cảm ứng để bật Phím Ảo
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         let baseWorldSize = 2500; let currentWorldSize = baseWorldSize; let targetWorldSize = baseWorldSize;
@@ -183,14 +215,15 @@
         
         let isTrangMode = false; let gameSpeedMulti = 1;
         let challengerTimer = 0; 
-        
         let isCheatActive = false;
-        cheatInput.addEventListener('input', (e) => {
-            if (e.target.value === "ducdeptrais1tg") {
-                isCheatActive = true; e.target.value = "HACK ON!";
-                e.target.style.color = "#ff4757"; e.target.style.borderColor = "#ff4757"; e.target.disabled = true;
+        
+        function checkMoreModes() {
+            if (document.getElementById('diff-select').value === 'more') {
+                moreModesDropdown.style.display = 'block';
+            } else {
+                moreModesDropdown.style.display = 'none';
             }
-        });
+        }
         
         const wallTaunts = ["Mù à mà đâm tường?", "Tường ngon không em?", "Bố tổ sư cái thằng lái lụa!", "Đâm tường vỡ thớt cmnr!", "Mắt để dưới gầm giường à?", "Lái ngu vãi đạn!"];
         const killTaunts = ["Quỳ xuống gọi {name} là bố đi!", "Bị {name} nó lùa như cún!", "Trình mầm non đòi đấu với {name}!", "Bị {name} nó tạt cho sang chấn tâm lý!", "{name} nó nhét hành ngập mõm kìa!", "Ăn quả tạt đầu khét lẹt từ {name}!", "{name} said: Đứng lùi ra cho anh biểu diễn!"];
@@ -285,29 +318,38 @@
         function showMenu() {
             gameState = 'menu'; gameOverScreen.style.display = 'none'; menuScreen.style.display = 'flex'; 
             uiEl.style.display = 'none'; leaderboardEl.style.display = 'none'; boostContainer.style.display = 'none';
-            cheatInput.style.display = 'none'; mobileControls.style.display = 'none';
+            mobileControls.style.display = 'none'; joystickZone.style.display = 'none';
         }
 
         function startGame() {
+            let cheatVal = cheatInput.value.trim().toLowerCase();
+            isCheatActive = (cheatVal === "ducdeptrais1tg");
+            if (isCheatActive) {
+                cheatInput.value = "HACK ON!"; cheatInput.style.color = "#ff4757"; cheatInput.style.borderColor = "#ff4757"; cheatInput.disabled = true;
+            }
+
             let pName = document.getElementById('player-name').value || "Player";
-            let diffSelectVal = parseInt(document.getElementById('diff-select').value);
+            let diffSelectVal = document.getElementById('diff-select').value;
             
             currentBotNames = [...baseBotNames];
-            if (diffSelectVal === 4) {
-                difficultyLvl = 2; gameSpeedMulti = 1.2; isTrangMode = true;
-                currentBotNames.push("Thủ khoa hà lội", "Đức Hùng", "Thủ khoa hà lội");
+            
+            if (diffSelectVal === 'more') {
+                let moreVal = document.getElementById('more-modes').value;
+                if (moreVal === 'trang') {
+                    difficultyLvl = 2; gameSpeedMulti = 1.2; isTrangMode = true;
+                    currentBotNames.push("Thủ khoa hà lội", "Đức Hùng", "Thủ khoa hà lội");
+                }
             } else {
-                difficultyLvl = diffSelectVal; isTrangMode = false;
+                difficultyLvl = parseInt(diffSelectVal); isTrangMode = false;
                 gameSpeedMulti = difficultyLvl === 1 ? 1 : (difficultyLvl === 2 ? 1.2 : 1.4); 
             }
             
             menuScreen.style.display = 'none'; gameOverScreen.style.display = 'none'; 
             uiEl.style.display = 'block'; leaderboardEl.style.display = 'block'; boostContainer.style.display = 'block';
             
-            if (!isTouchDevice) {
-                cheatInput.style.display = 'block'; cheatInput.value = ""; cheatInput.disabled = false; isCheatActive = false; cheatInput.style.color = "#00ffff"; cheatInput.style.borderColor = "#3498db";
-            } else {
-                mobileControls.style.display = 'block'; // Bật phím ảo nếu có cảm ứng
+            if (isTouchDevice) {
+                mobileControls.style.display = 'block'; 
+                joystickZone.style.display = 'block'; 
             }
             
             player = new Snake(pName, true, 50, 0, 0, skins[currentSkinIdx]); 
@@ -400,12 +442,21 @@
         }
 
         function triggerDash(targetPlayer) {
-            let cost = (isCheatActive && targetPlayer.isPlayer) ? 0 : 50; 
-            if (targetPlayer && (targetPlayer.score >= 50 || isCheatActive) && targetPlayer.dashFrames <= 0) {
-                targetPlayer.dashFrames = 15; targetPlayer.score -= cost; targetPlayer.updateStats();
-                let tail = targetPlayer.segments[targetPlayer.segments.length - 1];
-                for(let i=0; i<3; i++) foods.push({ x: tail.x + (Math.random()*30-15), y: tail.y + (Math.random()*30-15), size: 7, color: targetPlayer.color, isBig: false, isHp: false });
-                if (targetPlayer.isPlayer) scoreEl.innerText = Math.floor(targetPlayer.score);
+            let isCheater = (isCheatActive && targetPlayer.isPlayer);
+            let cost = isCheater ? 0 : 50; 
+            
+            if (targetPlayer && (targetPlayer.score >= 50 || isCheater)) {
+                // CHỈ CHỈNH SỬA TẠI ĐÂY: Nếu Hack, đè dashFrames liên tục không cần chờ <= 0
+                if (targetPlayer.dashFrames <= 0 || isCheater) {
+                    targetPlayer.dashFrames = 15; 
+                    targetPlayer.score -= cost; 
+                    targetPlayer.updateStats();
+                    
+                    let tail = targetPlayer.segments[targetPlayer.segments.length - 1];
+                    for(let i=0; i<3; i++) foods.push({ x: tail.x + (Math.random()*30-15), y: tail.y + (Math.random()*30-15), size: 7, color: targetPlayer.color, isBig: false, isHp: false });
+                    
+                    if (targetPlayer.isPlayer) scoreEl.innerText = Math.floor(targetPlayer.score);
+                }
             }
         }
 
@@ -413,12 +464,14 @@
             gameState = 'gameover'; deathTextEl.innerText = getDeathMessage(killerName); 
             finalScoreEl.innerText = Math.floor(player.score);
             gameOverScreen.style.display = 'flex'; uiEl.style.display = 'none'; 
-            leaderboardEl.style.display = 'none'; boostContainer.style.display = 'none'; cheatInput.style.display = 'none'; mobileControls.style.display = 'none';
-            player.isBoosting = false;
+            leaderboardEl.style.display = 'none'; boostContainer.style.display = 'none'; 
+            mobileControls.style.display = 'none'; joystickZone.style.display = 'none';
+            if(player) player.isBoosting = false;
         }
 
         // --- XỬ LÝ CHUỘT / CẢM ỨNG DI CHUYỂN ---
         function updateTargetFromEvent(clientX, clientY) {
+            if(!player) return;
             player.targetX = (clientX / currentZoom) + camera.x; player.targetY = (clientY / currentZoom) + camera.y;
             player.isDragging = true;
         }
@@ -428,21 +481,45 @@
         window.addEventListener('mousemove', (e) => { if (player && player.isDragging && gameState === 'playing') updateTargetFromEvent(e.clientX, e.clientY); });
         window.addEventListener('mouseup', () => { if(player) player.isDragging = false; });
         
-        // Touch (Vuốt Lái trên Điện Thoại)
-        function handleTouchMove(e) {
-            // Lọc ra touch không chạm vào nút ảo
-            for (let i = 0; i < e.touches.length; i++) {
-                let touch = e.touches[i];
-                if (!touch.target.closest('.action-btn')) {
-                    updateTargetFromEvent(touch.clientX, touch.clientY);
-                    return; // Đã tìm thấy ngón tay lái rắn
-                }
-            }
-            if(player) player.isDragging = false;
+        // --- XỬ LÝ JOYSTICK MOBILE ---
+        let joyActive = false; let joyCenter = {x: 0, y: 0};
+        
+        joystickZone.addEventListener('touchstart', (e) => {
+            e.preventDefault(); e.stopPropagation(); joyActive = true;
+            let rect = joystickZone.getBoundingClientRect();
+            joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+            handleJoyMove(e);
+        }, {passive: false});
+
+        joystickZone.addEventListener('touchmove', handleJoyMove, {passive: false});
+        joystickZone.addEventListener('touchend', (e) => {
+            e.preventDefault(); joyActive = false;
+            joystickKnob.style.transform = `translate(-50%, -50%)`;
+        });
+
+        function handleJoyMove(e) {
+            if(!joyActive || !player || gameState !== 'playing') return;
+            e.preventDefault(); e.stopPropagation();
+            let touch = e.targetTouches[0];
+            let dx = touch.clientX - joyCenter.x; let dy = touch.clientY - joyCenter.y;
+            let distance = Math.sqrt(dx*dx + dy*dy);
+            let maxDist = 35; 
+
+            if (distance > maxDist) { dx = (dx / distance) * maxDist; dy = (dy / distance) * maxDist; }
+            joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+            player.isDragging = true;
+            let angle = Math.atan2(dy, dx);
+            player.targetX = player.segments[0].x + Math.cos(angle) * 1000;
+            player.targetY = player.segments[0].y + Math.sin(angle) * 1000;
         }
-        window.addEventListener('touchstart', (e) => { if (gameState === 'playing') handleTouchMove(e); }, {passive: false});
-        window.addEventListener('touchmove', (e) => { if (gameState === 'playing') { handleTouchMove(e); e.preventDefault(); } }, {passive: false});
-        window.addEventListener('touchend', (e) => { if (gameState === 'playing') handleTouchMove(e); });
+
+        window.addEventListener('touchstart', (e) => { 
+            if (isTouchDevice && gameState === 'playing' && !e.target.closest('#joystick-zone') && !e.target.closest('.action-btn')) {
+                // Ngăn cản click bên ngoài joystick
+            }
+        }, {passive: false});
+
 
         // --- VIRTUAL BUTTONS (MOBILE) ---
         const btnBoost = document.getElementById('btn-boost');
@@ -461,13 +538,13 @@
 
         // --- BÀN PHÍM (PC) ---
         window.addEventListener('keydown', (e) => { 
-            if (document.activeElement === cheatInput) return;
+            if (document.activeElement.tagName === 'INPUT') return;
             if (e.code === 'Space' && gameState === 'playing') { if (player) player.isBoosting = true; e.preventDefault(); }
             if ((e.code === 'KeyE' || e.key === 'e') && gameState === 'playing') triggerDash(player);
             if ((e.code === 'KeyQ' || e.key === 'q') && gameState === 'playing') if (player) shootFireball(player);
         });
         window.addEventListener('keyup', (e) => { 
-            if (document.activeElement === cheatInput) return;
+            if (document.activeElement.tagName === 'INPUT') return;
             if (e.code === 'Space' && gameState === 'playing') { if (player) player.isBoosting = false; }
         });
 
