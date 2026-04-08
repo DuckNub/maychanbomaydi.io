@@ -39,7 +39,6 @@
         }
         .lightning-board { animation: lightningGlow 0.3s infinite alternate !important; border: 2px solid #fff !important; }
 
-        /* UI MENU TỐI ƯU MOBILE KHÔNG BỊ TRÀN VIỀN */
         #menu-screen, #game-over-screen { 
             position: absolute; top: 0; left: 0; width: 100vw; min-height: 100vh; height: 100%;
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
@@ -148,9 +147,7 @@
     <div id="leaderboard"><h3>BẢNG XẾP HẠNG</h3><div id="lb-content"></div></div>
 
     <div id="joystick-zone">
-        <div id="joystick-base">
-            <div id="joystick-knob"></div>
-        </div>
+        <div id="joystick-base"><div id="joystick-knob"></div></div>
     </div>
     <div id="mobile-controls">
         <div class="action-btn" id="btn-fire"><span>🔥</span>Khạc</div>
@@ -206,6 +203,20 @@
         const cheatInput = document.getElementById('cheat-input');
         const mobileControls = document.getElementById('mobile-controls'), joystickZone = document.getElementById('joystick-zone'), joystickKnob = document.getElementById('joystick-knob');
         const moreModesDropdown = document.getElementById('more-modes');
+
+        // --- HỆ THỐNG ÂM THANH (SOUND MANAGER) ---
+        const bgm = new Audio('bgm.mp3');
+        bgm.loop = true;
+        bgm.volume = 0.4; // Chỉnh âm lượng nhạc nền vừa phải
+
+        const killSounds = ['kill1.mp3', 'kill2.mp3', 'kill3.mp3', 'kill4.mp3', 'kill5.mp3'];
+
+        function playSFX(src, vol = 1.0) {
+            let sound = new Audio(src);
+            sound.volume = vol;
+            // Phát âm thanh, bỏ qua lỗi nếu bị chặn autoplay
+            sound.play().catch(e => console.log("SFX Error: ", e));
+        }
 
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
@@ -352,6 +363,9 @@
                 joystickZone.style.display = 'block'; 
             }
             
+            // CHƠI NHẠC NỀN
+            bgm.play().catch(e => console.log("Không thể tự phát nhạc: ", e));
+
             player = new Snake(pName, true, 50, 0, 0, skins[currentSkinIdx]); 
             player.hp = player.maxHp;
             scoreEl.innerText = player.score;
@@ -423,6 +437,9 @@
                 else { owner.shootCooldown = 2; }
                 owner.updateStats();
                 
+                // PHÁT TIẾNG BẮN NẾU LÀ NGƯỜI CHƠI
+                if (owner.isPlayer) playSFX('shoot.mp3', 0.4);
+
                 let head = owner.segments[0];
                 let projSpeed = isCheater ? 45 : 22 + (owner.size * 0.15); 
                 
@@ -446,7 +463,6 @@
             let cost = isCheater ? 0 : 50; 
             
             if (targetPlayer && (targetPlayer.score >= 50 || isCheater)) {
-                // CHỈ CHỈNH SỬA TẠI ĐÂY: Nếu Hack, đè dashFrames liên tục không cần chờ <= 0
                 if (targetPlayer.dashFrames <= 0 || isCheater) {
                     targetPlayer.dashFrames = 15; 
                     targetPlayer.score -= cost; 
@@ -467,21 +483,22 @@
             leaderboardEl.style.display = 'none'; boostContainer.style.display = 'none'; 
             mobileControls.style.display = 'none'; joystickZone.style.display = 'none';
             if(player) player.isBoosting = false;
+
+            // TẮT NHẠC NỀN KHI CHẾT
+            bgm.pause();
+            bgm.currentTime = 0;
         }
 
-        // --- XỬ LÝ CHUỘT / CẢM ỨNG DI CHUYỂN ---
         function updateTargetFromEvent(clientX, clientY) {
             if(!player) return;
             player.targetX = (clientX / currentZoom) + camera.x; player.targetY = (clientY / currentZoom) + camera.y;
             player.isDragging = true;
         }
 
-        // PC Mouse
         window.addEventListener('mousedown', (e) => { if (gameState === 'playing' && e.target.tagName !== 'BUTTON') updateTargetFromEvent(e.clientX, e.clientY); });
         window.addEventListener('mousemove', (e) => { if (player && player.isDragging && gameState === 'playing') updateTargetFromEvent(e.clientX, e.clientY); });
         window.addEventListener('mouseup', () => { if(player) player.isDragging = false; });
         
-        // --- XỬ LÝ JOYSTICK MOBILE ---
         let joyActive = false; let joyCenter = {x: 0, y: 0};
         
         joystickZone.addEventListener('touchstart', (e) => {
@@ -515,13 +532,10 @@
         }
 
         window.addEventListener('touchstart', (e) => { 
-            if (isTouchDevice && gameState === 'playing' && !e.target.closest('#joystick-zone') && !e.target.closest('.action-btn')) {
-                // Ngăn cản click bên ngoài joystick
-            }
+            if (isTouchDevice && gameState === 'playing' && !e.target.closest('#joystick-zone') && !e.target.closest('.action-btn')) { }
         }, {passive: false});
 
 
-        // --- VIRTUAL BUTTONS (MOBILE) ---
         const btnBoost = document.getElementById('btn-boost');
         const btnDash = document.getElementById('btn-dash');
         const btnFire = document.getElementById('btn-fire');
@@ -536,7 +550,6 @@
         btnFire.addEventListener('touchend', (e) => { e.preventDefault(); btnFire.classList.remove('active'); });
 
 
-        // --- BÀN PHÍM (PC) ---
         window.addEventListener('keydown', (e) => { 
             if (document.activeElement.tagName === 'INPUT') return;
             if (e.code === 'Space' && gameState === 'playing') { if (player) player.isBoosting = true; e.preventDefault(); }
@@ -756,7 +769,10 @@
                                 s.dead = true;
                                 if (s.isPlayer) { gameOver(p.owner.name); } 
                                 else {
+                                    // BẮN CHẾT BOT -> PHÁT TIẾNG HẠ GỤC
                                     if (p.owner.isPlayer) {
+                                        playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 0.8);
+
                                         let tauntArr = isTrangMode ? trangTaunts : fightTaunts;
                                         let randomTaunt = tauntArr[Math.floor(Math.random() * tauntArr.length)];
                                         floatingTexts.push({
@@ -803,7 +819,10 @@
                             defender.score += Math.max(1, Math.floor((attacker.score / 3) * penalty));
                             defender.updateStats(); 
                             
+                            // ĐÂM CHẾT BẰNG THÂN -> PHÁT TIẾNG HẠ GỤC
                             if (defender.isPlayer) {
+                                playSFX(killSounds[Math.floor(Math.random() * killSounds.length)], 0.8);
+
                                 scoreEl.innerText = Math.floor(defender.score);
                                 let tauntArr = isTrangMode ? trangTaunts : fightTaunts;
                                 let randomTaunt = tauntArr[Math.floor(Math.random() * tauntArr.length)];
