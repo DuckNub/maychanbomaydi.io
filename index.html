@@ -5,262 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MÀY CHAN BỐ MÀY ĐI.IO</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #0b0c10; overflow: hidden; touch-action: none; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; }
+        body { margin: 0; padding: 0; background-color: #0b0c10; overflow: hidden; touch-action: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; }
         canvas { display: block; }
-        #ui { position: absolute; top: 15px; left: 15px; font-size: clamp(18px, 4vw, 24px); font-weight: bold; pointer-events: none; text-shadow: 2px 2px 4px #000; display: none; z-index: 10; }
-        #boost-container { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 400px; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #34495e; border-radius: 10px; display: none; z-index: 10; overflow: hidden; }
-        #boost-bar { width: 0%; height: 100%; background: #2ecc71; transition: width 0.2s; }
-        #leaderboard { position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; border: 2px solid #0f3460; display: none; z-index: 10; width: 140px; font-size: 13px; }
-        #menu-screen, #game-over-screen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; background: radial-gradient(circle, #2c3e50, #0b0c10); padding: 20px; box-sizing: border-box; }
-        #game-over-screen { display: none; background: rgba(0,0,0,0.95); }
-        .setup-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; width: 100%; max-width: 350px; display: flex; flex-direction: column; gap: 12px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #3498db; background: rgba(0,0,0,0.5); color: white; font-weight: bold; text-align: center; box-sizing: border-box; outline: none; }
-        .start-btn { background: linear-gradient(45deg, #e94560, #c0392b); border: none; font-size: 22px; cursor: pointer; border-radius: 50px; transition: 0.2s; color: white; font-weight: 900; padding: 15px 40px; width: 100%; max-width: 350px; margin-top: 10px; }
-        .start-btn:active { transform: scale(0.95); }
-        #joystick-zone { position: absolute; bottom: 40px; left: 40px; width: 100px; height: 100px; display: none; z-index: 15; }
-        #joystick-base { width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.3); position: relative; }
-        #joystick-knob { width: 40px; height: 40px; background: #3498db; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px solid white; }
-        #mobile-controls { position: absolute; bottom: 40px; right: 20px; display: none; gap: 15px; z-index: 15; }
-        .action-btn { width: 65px; height: 65px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 2px solid #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold; }
-        .action-btn span { font-size: 10px; }
+        #ui { position: absolute; top: 15px; left: 15px; font-size: clamp(16px, 4vw, 24px); font-weight: bold; pointer-events: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); display: none; z-index: 10; }
+        #boost-container { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 24px; background-color: rgba(0, 0, 0, 0.8); border: 2px solid #34495e; border-radius: 12px; display: none; z-index: 10; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        #level-label { position: absolute; left: 15px; top: 0; line-height: 24px; font-size: clamp(10px, 3vw, 14px); font-weight: 900; color: white; z-index: 2; text-shadow: 1px 1px 2px black; letter-spacing: 1px; }
+        #boost-bar { width: 0%; height: 100%; background: #2ecc71; border-radius: 10px; transition: width 0.2s ease-out, background 0.5s; }
+        #leaderboard { position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; font-size: 14px; border: 2px solid #0f3460; display: none; z-index: 10; width: 150px; transition: all 0.3s; pointer-events: none; }
+        @media (max-width: 768px) { #leaderboard { width: 110px; font-size: 11px; padding: 8px; } }
+        #leaderboard h3 { margin: 0 0 8px 0; font-size: clamp(11px, 3vw, 14px); color: #e94560; text-align: center; border-bottom: 1px solid #555; padding-bottom: 5px; }
+        .lb-entry { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 1em; }
+        .lb-me { background: rgba(255, 255, 255, 0.1); padding: 2px 5px; border-radius: 5px; color: #f1c40f;}
+        .rank-1 { color: #f1c40f; font-weight: 900; text-shadow: 0 0 5px #f1c40f; }
+        @keyframes lightningGlow { 0% { box-shadow: 0 0 10px #00ffff, inset 0 0 5px #00ffff; border-color: #00ffff; } 50% { box-shadow: 0 0 20px #f1c40f, inset 0 0 10px #f1c40f; border-color: #fff; transform: scale(1.02); } 100% { box-shadow: 0 0 10px #e94560, inset 0 0 5px #e94560; border-color: #e94560; } }
+        .lightning-board { animation: lightningGlow 0.3s infinite alternate !important; border: 2px solid #fff !important; }
+        #menu-screen, #game-over-screen { position: absolute; top: 0; left: 0; width: 100vw; min-height: 100vh; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 20; padding: 5vh 20px 20px 20px; box-sizing: border-box; overflow-y: auto; }
+        #menu-screen { background: radial-gradient(circle at center, #2c3e50 0%, #0b0c10 100%); background-size: 200% 200%; animation: gradientMove 10s ease infinite; }
+        #game-over-screen { background-color: rgba(0, 0, 0, 0.85); display: none; justify-content: center; }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        h1 { font-size: clamp(24px, 8vw, 55px); color: #e94560; text-align: center; text-shadow: 0 0 20px #e94560, 0 0 5px #fff; margin: 10px 0 5px 0; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;}
+        .author-text { font-family: 'Courier New', Courier, monospace; color: #00ffff; font-size: clamp(12px, 4vw, 16px); text-shadow: 0 0 10px #00ffff; margin-bottom: 20px; letter-spacing: 1px; text-align: center;}
+        .setup-box { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin-bottom: 20px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05); box-sizing: border-box; flex-shrink: 0; }
+        .input-label { font-size: 12px; color: #f1c40f; font-weight: bold; text-align: left; margin-bottom: -5px; text-transform: uppercase; letter-spacing: 1px;}
+        input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 5vw, 18px); text-align: center; border-radius: 8px; border: 2px solid rgba(52, 152, 219, 0.5); background: rgba(0,0,0,0.3); color: white; font-weight: bold; outline: none; transition: 0.3s; }
+        input[type="text"]:focus { border-color: #e94560; box-shadow: 0 0 10px rgba(233, 69, 96, 0.5); background: rgba(0,0,0,0.6); }
+        #cheat-input { border-color: rgba(46, 204, 113, 0.5); color: #00ffff; font-family: monospace; font-size: 14px;}
+        select, .skin-btn { width: 100%; box-sizing: border-box; padding: 12px; font-size: clamp(14px, 4vw, 16px); font-weight: bold; border-radius: 8px; border: 2px solid rgba(241, 196, 15, 0.5); background: rgba(0,0,0,0.3); color: white; cursor: pointer; text-align: center; outline: none; transition: 0.3s; }
+        .skin-btn { border-color: #f1c40f; background: #d35400; font-size: clamp(16px, 5vw, 22px); text-shadow: 1px 1px 2px black;}
+        .start-btn { padding: 15px; font-size: clamp(20px, 6vw, 26px); font-weight: 900; color: #fff; background: linear-gradient(45deg, #e94560, #c0392b); border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px rgba(233, 69, 96, 0.4); text-transform: uppercase; width: 100%; max-width: 360px; letter-spacing: 2px; flex-shrink: 0; }
+        .hint { font-size: clamp(11px, 3vw, 13px); color: #bdc3c7; margin-top: 15px; margin-bottom: 30px; text-align: center; line-height: 1.6; background: rgba(0,0,0,0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 360px; box-sizing: border-box; flex-shrink: 0;}
+        #joystick-zone { position: absolute; bottom: 20px; left: 20px; width: 120px; height: 120px; z-index: 15; display: none; touch-action: none; }
+        #joystick-base { width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%; position: relative; box-sizing: border-box; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+        #joystick-knob { width: 50px; height: 50px; background: radial-gradient(circle, #3498db, #2980b9); border: 2px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.05s; }
+        #mobile-controls { position: absolute; bottom: 20px; right: 20px; width: 140px; height: 140px; display: none; z-index: 15; }
+        .action-btn { position: absolute; width: 55px; height: 55px; border-radius: 50%; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255, 255, 255, 0.3); color: white; font-weight: bold; font-size: 11px; display: flex; flex-direction: column; justify-content: center; align-items: center; user-select: none; -webkit-user-select: none; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.1s; }
+        .action-btn span { font-size: 22px; margin-bottom: 2px; text-shadow: 0 0 5px currentColor; }
+        #btn-fire { top: 0; left: 0; border-color: #ff4757; color: #ff4757; }
+        #btn-dash { bottom: 0; left: -30px; border-color: #00ffff; color: #00ffff; }
+        #btn-boost { bottom: -10px; right: -10px; border-color: #f1c40f; color: #f1c40f; width: 75px; height: 75px; } 
     </style>
 </head>
 <body>
     <div id="ui">Điểm: <span id="score">0</span></div>
-    <div id="boost-container"><div id="boost-bar"></div></div>
-    <div id="leaderboard"><h3>TOP CHIẾN THẦN</h3><div id="lb-content"></div></div>
-
+    <div id="boost-container"><div id="level-label">CẤP 1</div><div id="boost-bar"></div></div>
+    <div id="leaderboard"><h3>BẢNG XẾP HẠNG</h3><div id="lb-content"></div></div>
     <div id="joystick-zone"><div id="joystick-base"><div id="joystick-knob"></div></div></div>
     <div id="mobile-controls">
-        <div class="action-btn" id="btn-fire">🔥<span>KHẠC</span></div>
-        <div class="action-btn" id="btn-dash">⚡<span>LƯỚT</span></div>
+        <div class="action-btn" id="btn-fire"><span>🔥</span>Khạc</div>
+        <div class="action-btn" id="btn-dash"><span>⚡</span>Lướt</div>
+        <div class="action-btn" id="btn-boost"><span>🚀</span>Ép Ga</div>
     </div>
-
     <div id="menu-screen">
-        <h1 style="color:#e94560; text-shadow: 0 0 15px #e94560; font-size: 40px;">MÀY CHAN BỐ MÀY ĐI</h1>
+        <h1>MÀY CHAN BỐ MÀY ĐI.IO</h1>
+        <div class="author-text">Created by Đức Đẹp Trai</div>
         <div class="setup-box">
-            <input type="text" id="player-name" value="Đức Pro">
-            <input type="text" id="cheat-input" placeholder="MÃ HACK VIP...">
-            <select id="diff-select" onchange="document.getElementById('more-modes').style.display=(this.value==='more'?'block':'none')">
-                <option value="1">Độ khó: Gà Mờ</option>
-                <option value="2">Độ khó: Chiến Trường</option>
-                <option value="3">ĐỘ KHÓ: ĐỨC VIPPRO 🔥</option>
-                <option value="more">--- More ---</option>
+            <div class="input-label">TÊN HIỂN THỊ:</div>
+            <input type="text" id="player-name" value="Player" maxlength="15">
+            <div class="input-label" style="margin-top: 5px;">MÃ HACK (NẾU CÓ):</div>
+            <input type="text" id="cheat-input" placeholder="Nhập lệnh hack..." autocomplete="off">
+            <button class="skin-btn" id="skin-toggle" style="margin-top: 5px;" onclick="changeSkin()">😎 CHUẨN MEN</button>
+            <select id="diff-select" onchange="checkMoreModes()">
+                <option value="1">Độ khó: Dễ (Gà Mờ)</option>
+                <option value="2">Độ khó: Khó (Chiến Trường)</option>
+                <option value="3" class="vippro">ĐỘ KHÓ: ĐỨC VIPPRO 🔥</option>
+                <option value="more">--- Xem Thêm (More) ---</option>
             </select>
-            <select id="more-modes" style="display:none; border-color:#ff9ff3;"><option value="trang">👑 Chế độ: Hoàng Mai Trang</option></select>
-            <button class="start-btn" onclick="startGame()">VÀO ĐỜI</button>
+            <select id="more-modes" style="display:none; border-color: #ff9ff3;">
+                <option value="trang">👑 Chế độ: Hoàng Mai Trang</option>
+            </select>
         </div>
+        <button class="start-btn" onclick="startGame()">VÀO ĐỜI</button>
+        <div class="hint"><strong>PC:</strong> Chuột (Di chuyển) | Space (Tăng tốc) | E (Lướt) | Q (Khạc lửa)<br><strong>Mobile:</strong> Kéo Joystick trái để lái | Bấm nút phải xả skill</div>
     </div>
-
     <div id="game-over-screen">
-        <h1 style="font-size: 45px; color:#ff4757;">CÚT !!!</h1>
-        <p id="death-text" style="color:#f1c40f; font-weight:bold; text-align:center; font-size: 20px;"></p>
-        <p>Kinh nghiệm: <span id="final-score" style="color:#e94560; font-size:24px;">0</span></p>
-        <button class="start-btn" onclick="resetGame()">LÀM LẠI CUỘC ĐỜI</button>
+        <h1 style="font-size: clamp(35px, 8vw, 60px);">CHẾT NHĂN RĂNG!</h1>
+        <div id="death-text" style="color: #f1c40f; font-weight: bold; text-align: center; font-size: 20px; padding: 20px;"></div>
+        <div style="margin-top: -15px; color: #ccc;">Điểm Tích lũy: <span id="final-score" style="color: #e94560; font-weight: bold;">0</span></div>
+        <button class="start-btn" style="margin-top: 20px; max-width: 250px;" onclick="resetGame()">LÀM LẠI</button>
     </div>
-
     <canvas id="gameCanvas"></canvas>
-
     <script>
         const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d');
-        
-        // --- SOUND MANAGER ---
-        const bgm = new Audio('bgm.mp3'); bgm.loop = true; bgm.volume = 0.1;
-        const dieAudio = new Audio('die.mp3'); dieAudio.volume = 1.0;
+        const uiEl = document.getElementById('ui'), scoreEl = document.getElementById('score'), lbContent = document.getElementById('lb-content'), menuScreen = document.getElementById('menu-screen'), gameOverScreen = document.getElementById('game-over-screen'), finalScoreEl = document.getElementById('final-score'), deathTextEl = document.getElementById('death-text'), boostBar = document.getElementById('boost-bar'), levelLabel = document.getElementById('level-label'), leaderboardEl = document.getElementById('leaderboard');
+        const cheatInput = document.getElementById('cheat-input'), joystickZone = document.getElementById('joystick-zone'), joystickKnob = document.getElementById('joystick-knob'), moreModesDropdown = document.getElementById('more-modes');
+
+        // --- HỆ THỐNG ÂM THANH (DỰA TRÊN YÊU CẦU MỚI) ---
+        const bgm = new Audio('bgm.mp3'); bgm.loop = true; bgm.volume = 0.1; // NHẠC NỀN SIÊU NHỎ
+        const dieSFX = new Audio('die.mp3'); dieSFX.volume = 1.0; // TIẾNG CHẾT TO
         const killSounds = ['kill1.mp3', 'kill2.mp3', 'kill3.mp3', 'kill4.mp3', 'kill5.mp3'];
+        function playSFX(src, vol = 1.0) { let sound = new Audio(src); sound.volume = vol; sound.play().catch(e => {}); }
 
-        function playSFX(s, v=1.0) { let a = new Audio(s); a.volume = v; a.play().catch(()=>{}); }
+        let shakeFrames = 0, shakeMagnitude = 0;
+        function triggerShake(f, m) { shakeFrames = f; shakeMagnitude = m; }
 
-        const botNames = ["Boy Phố", "Báo Thủ", "Lươn Chúa", "Đại Ca Mõm", "Chúa Tể Ăn Hôi", "Trẻ Trâu", "Simp Lỏ", "Chiến Thần", "Kẻ Hủy Diệt", "Mỏ Hỗn"];
-        const wallTaunts = ["Mù à đâm tường? Thay kính đi em!", "Tường ngon không sếp? Nhai kỹ vào!", "Lái ngu vầy đi bộ cho nó lành.", "Bố mẹ cho ăn học để đi đâm tường à?", "Phí cả cơm nước, đâm tường vỡ thớt cmnr!"];
-        const killTaunts = ["Bị {name} vả cho sang chấn tâm lý!", "Quỳ xuống gọi {name} là bố đi con trai.", "Trình này đi chăn vịt đi, tuổi gì với {name}!", "Bị {name} nó nhét hành ngập mõm kìa!"];
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        let baseWorldSize = 2500, currentWorldSize = baseWorldSize, targetWorldSize = baseWorldSize, gameState = 'menu', foods = [], camera = { x: 0, y: 0 }, currentZoom = 1, floatingTexts = [], projectiles = [], isTrangMode = false, gameSpeedMulti = 1, challengerTimer = 0, isCheatActive = false;
 
-        let player, bots = [], foods = [], projectiles = [];
-        let gameState = 'menu', worldSize = 3500, camera = {x:0, y:0}, zoom = 1, shake = 0, shakeMag = 0, isCheat = false;
+        function checkMoreModes() { moreModesDropdown.style.display = document.getElementById('diff-select').value === 'more' ? 'block' : 'none'; }
+        
+        // BỘ CÂU KHỊA "MỎ HỖN"
+        const wallTaunts = ["Mù à đâm tường? Đi thay kính đi em!", "Tường ngon không sếp? Nhai kỹ vào nhé!", "Lái ngu vầy thì đi bộ cho nó lành.", "Bố mẹ cho ăn học để đi đâm tường à?", "Mắt để ở mông hay sao mà lái thế?", "Phí cả cơm nước, đâm tường vỡ thớt cmnr!", "Thắng làm vua, đâm tường làm cún nhé em."];
+        const killTaunts = ["Bị {name} vả cho sang chấn tâm lý!", "Quỳ xuống gọi {name} là bố đi con trai.", "Trình này đi chăn vịt đi, tuổi gì với {name}!", "Thấy {name} thì né ra, đâm đầu vào làm gì?", "Bị {name} nó nhét hành ngập mõm rồi kìa!", "Tuổi tôm đòi chan cơm với {name} à?", "Nhìn {name} mà học tập, gáy nữa đi em!"];
 
-        const tiers = [
-            { min: 0, color: '#2ecc71', aura: 'rgba(46, 204, 113, 0.3)', label: 'CẤP 1' },
-            { min: 1000, color: '#3498db', aura: 'rgba(52, 152, 219, 0.5)', label: 'CẤP 2' },
-            { min: 5000, color: '#f1c40f', aura: 'rgba(241, 196, 15, 0.7)', label: 'CẤP 3' }
-        ];
-        function getTier(s) { return s < 1000 ? tiers[0] : (s < 5000 ? tiers[1] : tiers[2]); }
+        const tiers = [{ min: 0, max: 2000, color: '#2ecc71', label: 'CẤP 1' }, { min: 2000, max: 5000, color: '#3498db', label: 'CẤP 2' }, { min: 5000, max: 10000, color: '#9b59b6', label: 'CẤP 3' }, { min: 10000, max: 25000, color: '#f1c40f', label: 'CẤP 4' }, { min: 25000, max: Infinity, color: '#e74c3c', label: 'CẤP 5' }];
+        function getTier(s) { for(let i=0; i<tiers.length; i++) { if(s >= tiers[i].min && s < tiers[i].max) return { tier: i, ...tiers[i] }; } return { tier: 0, ...tiers[0] }; }
+
+        const skins = [{ name: "CHUẨN MEN", emoji: "😎", body: "#3498db" }, { name: "ÁC QUỶ", emoji: "😈", body: "#8e44ad" }, { name: "ẾCH XANH", emoji: "🐸", body: "#2ecc71" }, { name: "MÈO MÉO", emoji: "😺", body: "#e67e22" }, { name: "ĐẦU LÂU", emoji: "💀", body: "#7f8c8d" }, { name: "LỬA CHÙA", emoji: "🔥", body: "#e74c3c" }, { name: "CỤC CỨT", emoji: "💩", body: "#8d6e63" }, { name: "NINJA", emoji: "🥷", body: "#2c3e50" }, { name: "CHÚ HỀ", emoji: "🤡", body: "#fd79a8" }, { name: "HOÀNG HẬU", emoji: "👑", body: "#ff9ff3" }];
+        let currentSkinIdx = 0;
+        function changeSkin() { currentSkinIdx = (currentSkinIdx + 1) % skins.length; document.getElementById('skin-toggle').innerText = skins[currentSkinIdx].emoji + " " + skins[currentSkinIdx].name; document.getElementById('skin-toggle').style.background = skins[currentSkinIdx].body; }
 
         class Snake {
-            constructor(name, isP, x, y, color, emoji) {
-                this.name = name; this.isP = isP; this.x = x; this.y = y; this.color = color; this.emoji = emoji;
-                this.score = 60; this.size = 15; this.angle = Math.random()*Math.PI*2; this.segments = [];
-                this.hp = 100; this.maxHp = 100; this.dash = 0; this.shootCD = 0;
-                for(let i=0; i<20; i++) this.segments.push({x:x, y:y});
+            constructor(name, isP, startS, x, y, skin) {
+                this.name = name; this.isPlayer = isP; this.score = startS; this.baseSize = 14; this.speed = 4.5; this.angle = Math.random()*Math.PI*2; this.segments = []; this.hp = 100; this.maxHp = 100; this.shootCooldown = 0; this.dashFrames = 0; this.currentMinDist = 7;
+                if (!skin) skin = skins[Math.floor(Math.random() * skins.length)]; this.emoji = skin.emoji; this.color = skin.body;
+                for(let i = 0; i < 15; i++) { this.segments.push({x: x, y: y}); }
+                this.updateStats();
             }
-            update() {
-                this.size = 15 + Math.sqrt(this.score)*0.4;
-                let speed = (this.dash > 0 ? 11 : 4.5) * (this.isP && isCheat ? 1.6 : 1);
-                this.x += Math.cos(this.angle) * speed; this.y += Math.sin(this.angle) * speed;
-                let head = {x: this.x, y: this.y};
-                let last = this.segments[0];
-                let dist = Math.hypot(head.x - last.x, head.y - last.y);
-                if(dist > this.size * 0.4) {
-                    this.segments.unshift(head);
-                    let targetLen = Math.floor(this.score/6) + 15;
-                    while(this.segments.length > targetLen) this.segments.pop();
-                }
-                if(this.dash > 0) this.dash--;
-                if(this.shootCD > 0) this.shootCD--;
-            }
-            draw() {
-                let t = getTier(this.score);
-                ctx.save();
-                this.segments.forEach((seg, i) => {
-                    ctx.globalAlpha = 1 - (i/this.segments.length)*0.8;
-                    ctx.fillStyle = this.color;
-                    if(this.score > 1000) { ctx.shadowBlur = 10; ctx.shadowColor = t.color; }
-                    ctx.beginPath(); ctx.arc(seg.x, seg.y, this.size * (1 - i/this.segments.length*0.5), 0, Math.PI*2); ctx.fill();
-                });
-                ctx.restore();
-                ctx.font = (this.size*1.3)+"px Arial"; ctx.textAlign='center';
-                ctx.fillText(this.emoji, this.x, this.y + this.size/2);
-                ctx.font = "bold 13px Segoe UI"; ctx.fillStyle='white'; 
-                ctx.fillText(this.name + " ("+Math.floor(this.score)+")", this.x, this.y - this.size - 12);
-            }
+            updateStats() { this.size = this.baseSize + Math.sqrt(this.score)*0.35; this.targetLen = 5 + Math.floor(this.score / 25); while(this.segments.length < this.targetLen) this.segments.push({...this.segments[this.segments.length-1]}); while(this.segments.length > this.targetLen && this.segments.length > 5) this.segments.pop(); }
         }
 
-        function spawnBot() { bots.push(new Snake(botNames[Math.floor(Math.random()*botNames.length)], false, (Math.random()-0.5)*worldSize, (Math.random()-0.5)*worldSize, "hsl("+Math.random()*360+",70%,50%)", "🐍")); }
-        function spawnFood() { foods.push({x:(Math.random()-0.5)*worldSize, y:(Math.random()-0.5)*worldSize, s:Math.random()*4+4, c:"hsl("+Math.random()*360+",80%,60%)"}); }
-
-        function startGame() {
-            isCheat = document.getElementById('cheat-input').value.toLowerCase() === "ducdeptrais1tg";
-            player = new Snake(document.getElementById('player-name').value || "Đức Pro", true, 0, 0, "#3498db", "😎");
-            bots = []; for(let i=0; i<50; i++) spawnBot();
-            foods = []; for(let i=0; i<400; i++) spawnFood();
-            document.getElementById('menu-screen').style.display='none';
-            document.getElementById('ui').style.display='block';
-            document.getElementById('leaderboard').style.display='block';
-            document.getElementById('boost-container').style.display='block';
-            if('ontouchstart' in window) { document.getElementById('joystick-zone').style.display='block'; document.getElementById('mobile-controls').style.display='flex'; }
-            
-            bgm.currentTime = 0; bgm.play().catch(()=>{}); 
-            gameState = 'playing';
-        }
-
-        // --- HÀM LÀM LẠI MỚI (FIX ÂM THANH) ---
-        function resetGame() {
-            dieAudio.pause(); // TẮT TIẾNG CHẾT
-            dieAudio.currentTime = 0;
-            location.reload(); // RESET TOÀN BỘ GAME
-        }
-
-        function shoot(s) {
-            if(s.shootCD > 0 && !isCheat) return;
-            if(s.score < 100 && !isCheat) return;
-            if(!isCheat) s.score -= 100;
-            s.shootCD = isCheat ? 4 : 45;
-            if(s.isP) playSFX('shoot.mp3', 1.0);
-            projectiles.push({x: s.x, y: s.y, a: s.angle, owner: s, life: 100});
-        }
-
-        // Joystick
-        let joyActive = false, joyKnob = document.getElementById('joystick-knob');
-        document.getElementById('joystick-zone').ontouchstart = () => joyActive = true;
-        window.ontouchmove = (e) => {
-            if(!joyActive || !player) return;
-            let touch = e.touches[0]; let rect = document.getElementById('joystick-base').getBoundingClientRect();
-            let dx = touch.clientX - (rect.left + 50), dy = touch.clientY - (rect.top + 50);
-            let dist = Math.sqrt(dx*dx+dy*dy);
-            let angle = Math.atan2(dy, dx);
-            let lim = Math.min(dist, 35);
-            joyKnob.style.transform = `translate(calc(-50% + ${Math.cos(angle)*lim}px), calc(-50% + ${Math.sin(angle)*lim}px))`;
-            player.angle = angle;
-        };
-        window.ontouchend = () => { joyActive = false; joyKnob.style.transform = 'translate(-50%, -50%)'; };
-
-        window.onmousemove = (e) => { if(gameState==='playing') player.angle = Math.atan2(e.clientY - canvas.height/2, e.clientX - canvas.width/2); };
-        window.onkeydown = (e) => { if(e.code==='Space') player.dash=20; if(e.key==='q') shoot(player); };
-        document.getElementById('btn-fire').ontouchstart = () => shoot(player);
-        document.getElementById('btn-dash').ontouchstart = () => player.dash=25;
-
-        function loop() {
-            requestAnimationFrame(loop);
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            if(gameState !== 'playing') return;
-
-            player.update(); camera.x = player.x; camera.y = player.y;
-
-            bots.forEach(b => {
-                b.update();
-                if(Math.random()<0.02) b.angle += (Math.random()-0.5)*2;
-                if(Math.hypot(player.x-b.x, player.y-b.y) < 400 && Math.random()<0.015) shoot(b);
-            });
-
-            foods.forEach((f, i) => {
-                if(Math.hypot(player.x-f.x, player.y-f.y) < player.size + f.s) { player.score += 10; foods.splice(i,1); spawnFood(); document.getElementById('score').innerText = Math.floor(player.score); }
-            });
-
-            projectiles.forEach((p, i) => {
-                p.x += Math.cos(p.a)*22; p.y += Math.sin(p.a)*22; p.life--;
-                [player, ...bots].forEach(s => {
-                    if(s === p.owner || s.dead) return;
-                    if(Math.hypot(p.x-s.x, p.y-s.y) < s.size + 10) {
-                        s.hp -= 40; p.life = 0;
-                        if(p.owner.isP) { shake=10; shakeMag=8; }
-                        if(s.hp <= 0) {
-                            s.dead = true;
-                            if(s.isP) die(p.owner.name);
-                            else if(p.owner.isP) { 
-                                playSFX(killSounds[Math.floor(Math.random()*5)], 1.0); 
-                                player.score+=350; shake=20; shakeMag=15; 
-                            }
-                        }
-                    }
-                });
-                if(p.life <= 0) projectiles.splice(i,1);
-            });
-
-            bots.forEach(b => {
-                if(Math.hypot(player.x-b.x, player.y-b.y) < player.size + b.size) {
-                    if(Math.random()>0.5) die(b.name);
-                    else { b.dead=true; playSFX(killSounds[Math.floor(Math.random()*5)], 1.0); player.score+=600; shake=20; shakeMag=15; }
-                }
-            });
-
-            if(Math.abs(player.x) > worldSize/2 || Math.abs(player.y) > worldSize/2) die(null);
-
-            document.getElementById('boost-bar').style.width = (player.score % 1000)/10 + "%";
-            document.getElementById('boost-bar').style.background = getTier(player.score).color;
-            let sorted = [player, ...bots].sort((a,b)=>b.score-a.score).slice(0,5);
-            document.getElementById('lb-content').innerHTML = sorted.map((s,i)=>`<div style="color:${s.isP?'#f1c40f':'white'}">#${i+1} ${s.name}: ${Math.floor(s.score)}</div>`).join('');
-            draw();
-        }
-
-        function die(k) {
-            gameState = 'over';
-            
-            // TẮT NHẠC NỀN KHI CHẾT
-            bgm.pause();
-            bgm.currentTime = 0;
-            
-            // PHÁT TIẾNG CHẾT
-            dieAudio.currentTime = 0;
-            dieAudio.play().catch(()=>{});
-
-            document.getElementById('game-over-screen').style.display='flex';
-            document.getElementById('death-text').innerText = k ? killTaunts[Math.floor(Math.random()*killTaunts.length)].replace(/{name}/g, k) : wallTaunts[Math.floor(Math.random()*wallTaunts.length)];
-            document.getElementById('final-score').innerText = Math.floor(player.score);
-        }
-
-        function draw() {
-            ctx.fillStyle = '#0b0c10'; ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.save();
-            if(shake > 0) { ctx.translate((Math.random()-0.5)*shakeMag, (Math.random()-0.5)*shakeMag); shake--; }
-            ctx.translate(canvas.width/2 - camera.x, canvas.height/2 - camera.y);
-            ctx.strokeStyle = '#222'; ctx.lineWidth = 1;
-            for(let i=-worldSize/2; i<=worldSize/2; i+=150) { ctx.beginPath(); ctx.moveTo(i,-worldSize/2); ctx.lineTo(i,worldSize/2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-worldSize/2,i); ctx.lineTo(worldSize/2,i); ctx.stroke(); }
-            ctx.strokeStyle = '#e94560'; ctx.lineWidth = 15; ctx.strokeRect(-worldSize/2, -worldSize/2, worldSize, worldSize);
-            foods.forEach(f => { ctx.fillStyle = f.c; ctx.beginPath(); ctx.arc(f.x, f.y, f.s, 0, Math.PI*2); ctx.fill(); });
-            projectiles.forEach(p => { ctx.fillStyle = '#00ffff'; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI*2); ctx.fill(); });
-            [...bots, player].forEach(s => { if(!s.dead) s.draw(); });
-            ctx.restore();
-        }
-        loop();
-    </script>
-</body>
-</html>
+        function
